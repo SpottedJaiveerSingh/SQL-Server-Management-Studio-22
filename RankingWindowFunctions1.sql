@@ -29,3 +29,14 @@ where RankCustomers<=2;
 
 --Assign Unique IDs to the rows of the 'Order Archive' Table
 --UNIQUE ID GENERATION
+Select
+Row_number() Over (order by OrderID, OrderDate) UniqueID,
+*
+From Sales.OrdersArchive;
+
+Select * from 
+(Select
+Row_number() Over (order by OrderID, OrderDate) UniqueID,
+*
+From Sales.OrdersArchive)t 
+where UniqueID=8;
