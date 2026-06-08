@@ -40,3 +40,10 @@ Row_number() Over (order by OrderID, OrderDate) UniqueID,
 *
 From Sales.OrdersArchive)t 
 where UniqueID=8;
+--Identifying duplicates rows in the table 'ordersarchives'
+--and return a clean result wiithout any duplicates
+Select * from (Select
+Row_number() over (Partition by OrderID Order by CreationTime DESC)rn,
+* from Sales.OrdersArchive)t
+where rn=1;
+-- to show the duplicates where rn>1; to be used
