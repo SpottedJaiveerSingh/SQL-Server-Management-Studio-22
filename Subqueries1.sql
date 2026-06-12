@@ -50,3 +50,47 @@ Left join (
 	From Sales.Orders
 	Group by CustomerID) o
 on c.CustomerID=o.CustomerID
+--Find the Product that have a price higher than the ag price of all products
+select *
+from Sales.Products
+Where Price>(
+			Select avg(Price)
+			From Sales.Products)
+--Show the details of orfers made by customers in germany
+Select * from Sales.Orders
+Where CustomerID IN (
+					Select CustomerID From Sales.Customers
+					Where Country='Germany')
+--Show the details of orders made by customers not in germany
+Select * from Sales.Orders
+Where CustomerID IN (
+					Select CustomerID From Sales.Customers
+					Where Country!='Germany')
+ --Find F employess whose salaries are > than the salaries of any M employess
+ Select * from Sales.Employees
+ Where Gender='F' AND 
+ Salary >
+		ANY(Select Salary
+		from Sales.Employees
+		Where Gender='M')
+ --Find F employess whose salaries are > than the salaries of ALL M employess
+ Select * from Sales.Employees
+ Where Gender='F' AND 
+ Salary >
+		ALL(Select Salary
+		from Sales.Employees
+		Where Gender='M')
+--Show all customer details and find total orders for each customer
+Select *,
+(Select COUNT(*) From Sales.Orders 
+where Sales.Orders.CustomerID=Sales.Customers.CustomerID) TotalSales
+From Sales.Customers
+--SHow the order details for customers in germany
+Select *
+From Sales.Orders
+Where Exists 
+	(Select 1   
+	From Sales.Customers
+	WHere Country='Germany'
+	And Sales.Orders.CustomerID=Sales.Customers.CustomerID)
+
