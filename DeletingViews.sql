@@ -1,2 +1,0 @@
---Deleting a View
-DROP VIEW V_MONTHLY_SUMMARY
