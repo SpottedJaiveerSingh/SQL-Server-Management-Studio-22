@@ -1,0 +1,1 @@
+--using create table as method in SQL server
