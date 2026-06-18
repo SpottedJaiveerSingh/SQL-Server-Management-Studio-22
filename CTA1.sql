@@ -1,1 +1,2 @@
 --using create table as method in SQL server
+--So basically CTA solves the issues by nicest way
