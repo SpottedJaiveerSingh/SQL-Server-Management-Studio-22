@@ -1,1 +1,1 @@
---using create table as method in SQL server!!--CTAs
+--using create table as method in SQL server!!--CTA
