@@ -22,19 +22,27 @@ EXEC GetCustomerSummary;
 --Define Stored procedure
 ALTER PROCEDURE GetCustomerSummary @Country NVARCHAR(50) = 'USA' As 
 BEGIN
+
+DECLARE @TotalCustomers INT, @AvgScore Float;
+
 Select 
-	Count(*) TotalCustomers,
-	AVG(Score) AvgScore
+	@TotalCustomers = Count(*),
+	@AvgScore=AVG(Score) 
 From Sales.Customers
-Where Sales.Customers.Country=@Country ;
---Find the total nunber of orders and total sales
-SELECT 
-Count(OrderID) TotalOrders,
-Sum(Sales) TotalSales
-From Sales.Orders o
-JOIN Sales.Customers c
-On c.CustomerID=o.CustomerID
-where c.Country=@Country
+Where Country=@Country ;
+
+
+PRINT 'Total Customers from ' + @Country + ':' + CAST(@TotalCustomers AS VARCHAR);
+PRINT 'Average Score from ' + @Country + ':' + CAST(@AvgScore AS VARCHAR);
+
+--SELECT 
+--	Count(OrderID) TotalOrders,
+--	Sum(Sales) TotalSales
+--From Sales.Orders o
+--JOIN Sales.Customers c
+--On c.CustomerID=o.CustomerID
+--where c.Country=@Country
+
 END
 
 EXEC GetCustomerSummary; 
