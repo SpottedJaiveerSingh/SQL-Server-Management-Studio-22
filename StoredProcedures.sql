@@ -1,49 +1,74 @@
---Step 1: Write a Query
---For US Customers find the total num of customers and the average score
-Select 
-Count(*) TotalCustomers,
-AVG(Score) AvgScore
-From Sales.Customers
-Where Sales.Customers.Country='USA';
 
---Step 2: Turning the Query into a stored procedure
-CREATE PROCEDURE GetCustomerSummary as 
-begin
-Select 
-Count(*) TotalCustomers,
-AVG(Score) AvgScore
-From Sales.Customers
-Where Sales.Customers.Country='USA'
-end;
---Step 3: Execute  the Strored Procedure
-EXEC GetCustomerSummary;
---For German Customers find the total num of customers and average score
+-- =================================================================================================
+-- Step 1: Write a Query
+-- =================================================================================================
 
---Define Stored procedure
-ALTER PROCEDURE GetCustomerSummary @Country NVARCHAR(50) = 'USA' As 
+-- For US Customers find the total num of customers and the average score
+SELECT 
+    COUNT(*) TotalCustomers,
+    AVG(Score) AvgScore
+FROM Sales.Customers
+WHERE Sales.Customers.Country='USA';
+GO -- Separates the query from the next batch
+
+-- ================================================================================================
+-- Step 2: Turning the Query into a stored procedure
+-- =================================================================================================
+
+CREATE PROCEDURE GetCustomerSummary AS 
 BEGIN
+    SELECT 
+        COUNT(*) TotalCustomers,
+        AVG(Score) AvgScore
+    FROM Sales.Customers
+    WHERE Sales.Customers.Country='USA'
+END;
+GO
 
-DECLARE @TotalCustomers INT, @AvgScore Float;
+-- =================================================================================================
+-- Step 3: Execute the Stored Procedure
+-- =================================================================================================
 
-Select 
-	@TotalCustomers = Count(*),
-	@AvgScore=AVG(Score) 
-From Sales.Customers
-Where Country=@Country ;
+EXEC GetCustomerSummary;
+GO
 
+-- For German Customers find the total num of customers and average score
+-- Define Stored procedure with parameter
+ALTER PROCEDURE GetCustomerSummary 
+    @Country NVARCHAR(50) = 'USA' 
+AS 
+BEGIN
+    DECLARE @TotalCustomers INT, @AvgScore FLOAT;
 
-PRINT 'Total Customers from ' + @Country + ':' + CAST(@TotalCustomers AS VARCHAR);
-PRINT 'Average Score from ' + @Country + ':' + CAST(@AvgScore AS VARCHAR);
+    -- Prepare and clean data
+    IF EXISTS(SELECT 1 FROM Sales.Customers WHERE Score IS NULL AND Country=@Country)
+    BEGIN
+        PRINT('Updating NULL Scores to 0 !')
+        UPDATE Sales.Customers
+        SET Score = 0
+        WHERE Score IS NULL AND Country=@Country;
+    END 
+    ELSE
+    BEGIN
+        PRINT('No Null Scores Found')
+    END;  
 
---SELECT 
---	Count(OrderID) TotalOrders,
---	Sum(Sales) TotalSales
---From Sales.Orders o
---JOIN Sales.Customers c
---On c.CustomerID=o.CustomerID
---where c.Country=@Country
+    -- Generate report
+    SELECT 
+        @TotalCustomers = COUNT(*),
+        @AvgScore = AVG(Score) 
+    FROM Sales.Customers
+    WHERE Country = @Country;
 
-END
+    -- Print the output clearly
+    PRINT 'Total Customers from ' + @Country + ': ' + CAST(@TotalCustomers AS VARCHAR);
+    PRINT 'Average Score from ' + @Country + ': ' + CAST(@AvgScore AS VARCHAR);
+END;
+GO -- This GO finishes the ALTER PROCEDURE definition successfully!
+
+-- =================================================================================================
+-- Step 4: Now execute the updated procedure safely
+-- =================================================================================================
 
 EXEC GetCustomerSummary; 
 EXEC GetCustomerSummary @Country = 'Germany';
