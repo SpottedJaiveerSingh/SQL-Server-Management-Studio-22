@@ -5,4 +5,5 @@ Create table Sales.EmployeeLogs(
 	EmployeeID int,
 	LogMessage Varchar(255),
 	LogDate DATE
-)
+) 
+--lets do it.
