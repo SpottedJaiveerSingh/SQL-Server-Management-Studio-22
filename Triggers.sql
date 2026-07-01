@@ -6,4 +6,4 @@ Create table Sales.EmployeeLogs(
 	LogMessage Varchar(255),
 	LogDate DATE
 ) 
---lets do it.
+--lets do it...!!!
