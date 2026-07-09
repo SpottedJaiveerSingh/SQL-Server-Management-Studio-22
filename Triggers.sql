@@ -24,4 +24,4 @@ Values
 --on every addition of values trigger will trigger.
 --use it on the respective applications
 --
-Select * From Sales.EmployeeLogs
+Select * From Sales.EmployeeLogs;
