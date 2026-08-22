@@ -44,3 +44,5 @@ into FactInternetSales_CS
 from FactInternetSales
 Create Clustered Columnstore Index idx_FactInternetSales_CS_PK
 On FactInternetSales_CS
+
+
