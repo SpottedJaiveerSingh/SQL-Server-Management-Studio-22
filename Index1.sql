@@ -44,5 +44,23 @@ into FactInternetSales_CS
 from FactInternetSales
 Create Clustered Columnstore Index idx_FactInternetSales_CS_PK
 On FactInternetSales_CS
+-------------------------------------
+Select * from Sales.Products
+Create unique NonCLustered Index idx_Products_Category
+on Sales.Products (Category)
+-->gives error as we have duplicates.
+Create unique NonCLustered Index idx_Products_Product
+on Sales.Products (Product)
+-->sucessful! 
+--CHECKING DATA INTEGRITY
+Insert into sales.products 
+(ProductID, Product) Values(106, 'Caps')
+-->error as cannot insert duplicates
+
+
+
+
+
+
 
 
