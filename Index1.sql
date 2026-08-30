@@ -57,7 +57,21 @@ Insert into sales.products
 (ProductID, Product) Values(106, 'Caps')
 -->error as cannot insert duplicates
 
+--#FILTERED INDEX#
+Select * from Sales.Customers
+where country = 'USA'
 
+Create NonClustered index idx_Customers_Country
+on Sales.Customers(Country)
+WHere Country='USA'
+
+--list all indexes on a specific table
+sp_helpindex 'Sales.DBCustomers'
+
+--monitoring index usage
+
+--dynamic management view
+select * from sys.dm_db_index_usage_stats
 
 
 
