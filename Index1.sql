@@ -74,6 +74,8 @@ sp_helpindex 'Sales.DBCustomers'
 select * from sys.dm_db_index_usage_stats
 
 
+--missing index
+select * from sys.dm_db_missing_index_details
 
 
 
