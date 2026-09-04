@@ -7,4 +7,6 @@ select *
 from FactResellerSales_HP
 order by SalesOrderNumber
 
+--it is basically used for optimization and better performance. whihc is really important for databases. 
+
 
